@@ -21,8 +21,13 @@ const deploy = async () => {
       .send({ gas : '1000000', gasPrice: web3.utils.toWei('2', 'gwei'), from : accounts[0] });
 
   const address = await result.options.address;
+
+  console.log(interface);
   console.log('Contract deployed to ', result.options.address);
 
+  const accounts1 = await web3.eth.getAccounts();
+  const balance1 = await web3.eth.getBalance(accounts1[0]);
+  console.log('Balance after deploying contract ', balance1);
 
 };
 deploy();
