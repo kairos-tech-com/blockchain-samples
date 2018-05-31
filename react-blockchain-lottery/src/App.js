@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import web3 from './web3';
+//import web3 from './web3';
+import Web3 from 'web3';
 import lottery from './lottery';
 
 class App extends Component {
@@ -13,21 +14,26 @@ class App extends Component {
     message: ''
   };
 
+  //const web3 = new Web3(window.web3.currentProvider);
+
 async componentDidMount() {
     const manager = await lottery.methods.manager().call();
     const players = await lottery.methods.getPlayers().call();
-    const balance = await web3.eth.getBalance(lottery.options.address);
+
+    const blah = new Web3(window.web3.currentProvider);
+    const balance = await blah.eth.getBalance(lottery.options.address);
     this.setState({ manager, players, balance });
   }
 
   onSubmit = async (event) => {
     event.preventDefault();
-    const accounts = await web3.eth.getAccounts();
+    const blah = new Web3(window.web3.currentProvider);
+    const accounts = await blah.eth.getAccounts();
 
     this.setState({ message: 'waiting on transaction sucess...'});
     await lottery.methods.enter().send({
       from: accounts[0],
-      value: web3.utils.toWei(this.state.value, 'ether')
+      value: blah.utils.toWei(this.state.value, 'ether')
 
   });
 
@@ -35,8 +41,9 @@ async componentDidMount() {
 };
 
 onClick = async () => {
+  const blah = new Web3(window.web3.currentProvider);
 
-  const accounts = await web3.eth.getAccounts();
+  const accounts = await blah.eth.getAccounts();
   this.setState({message:' waiting on transaction sucess...'})
   await lottery.methods.pickWinner().send({
     from: accounts[0],
@@ -44,13 +51,21 @@ onClick = async () => {
 this.setState({message: 'A winner has been picked!'});
 };
    render() {
-    console.log(web3.version.bind);
+     console.log(window);
+     console.log(window.web3.currentProvider);
+     const blah = new Web3(window.web3.currentProvider);
+     console.log(blah);
+
+     //const accounts = await blah.eth.getAccounts();
+     console.log(blah.eth.getAccounts());
+
+    console.log(blah.version.bind);
     return (
       <div>
       <h2>Lottery contract</h2>
       <p>This contract is managed by {this.state.manager}.
       There are currently {this.state.players.length} people entered,
-      competing to to win {web3.utils.fromWei(this.state.balance,'ether')} ether !
+      competing to to win {blah.utils.fromWei(this.state.balance,'ether')} ether !
       </p>
       <hr />
       <form onSubmit={this.onSubmit}>

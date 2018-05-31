@@ -1,5 +1,3 @@
-pragma solidity ^0.4.17;
-
 contract Lottery {
 
     address public manager;
@@ -8,6 +6,10 @@ contract Lottery {
 
     constructor() public {
         manager = msg.sender;
+    }
+
+    function getManager() public view returns (address) {
+        return manager;
     }
 
     function enter() public payable {
